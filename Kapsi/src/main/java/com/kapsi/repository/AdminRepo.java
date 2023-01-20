@@ -5,13 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.kapsi.model.Customer;
-
 import java.util.List;
 
 @Repository
-public interface CustomerRepo extends JpaRepository<Customer, Integer> {
+public interface AdminRepo extends JpaRepository<Admin, Integer> {
 
-    @Query("FROM Customer c WHERE c.mobileNumber=?1")
-    public Customer findCustomerByMobile(String mobileNumber);
+	@Query("FROM Admin c WHERE c.mobileNumber=?1")
+	public Admin findAdminByMobile(String mobileNumber);
+	
 }
