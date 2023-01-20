@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class UserLogin {
 
 	private String mobileNumber;
-
 	private String password;
 	
 }
