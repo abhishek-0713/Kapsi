@@ -25,20 +25,9 @@ public class LogInController {
     public ResponseEntity<String> loginMapping(@RequestBody UserLogin userLogin) throws LogInException {
 
         String output = loginService.login(userLogin);
-
-
         return new ResponseEntity<String>(output, HttpStatus.OK);
+
     }
-
-
-//    /*---------------------------------------------  login  ---------------------------------------------*/
-//    @PostMapping("/login/customer")
-//    public ResponseEntity<String> customerLoginMapping(@RequestBody Customer userLogin) throws LogInException {
-//
-//        String output = loginService.loginCustomer(userLogin);
-//
-//        return new ResponseEntity<String>(output, HttpStatus.OK);
-//    }
 
 
     /*---------------------------------------------  logout   ---------------------------------------------*/
@@ -46,7 +35,7 @@ public class LogInController {
     public ResponseEntity<String> logoutMapping(@RequestParam String key) throws LogInException {
 
         String output = loginService.logout(key);
-
         return new ResponseEntity<String>(output,HttpStatus.OK);
+
     }
 }
