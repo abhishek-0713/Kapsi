@@ -2,11 +2,18 @@ package com.kapsi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class Driver extends AbstractUser{
 
     @Id
@@ -15,7 +22,7 @@ public class Driver extends AbstractUser{
     private Integer licenceNo;
     private Float rating;
 
-    @JsonIgnore
+    
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cabId" )
     private Cab cab;
