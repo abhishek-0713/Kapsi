@@ -11,4 +11,5 @@ import com.kapsi.model.Cab;
 public interface CabRepo extends JpaRepository<Cab, Integer> {
 
 //	public List<Cab> findByAvailbilityStatus(Boolean avalibilityStatus);
+
 }

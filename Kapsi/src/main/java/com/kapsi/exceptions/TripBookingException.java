@@ -1,6 +1,6 @@
 package com.kapsi.exceptions;
 
-public class TripBookingException extends Exception{
+public class TripBookingException extends RuntimeException{
 
     public TripBookingException() {
     }

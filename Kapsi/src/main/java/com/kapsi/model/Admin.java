@@ -33,5 +33,4 @@ public class Admin extends AbstractUser{
 //	@Size(min = 6, max = 12, message = "Invalid Password [ must be 6 to 8 characters ]")
 //	private String password;
 
-	
 }

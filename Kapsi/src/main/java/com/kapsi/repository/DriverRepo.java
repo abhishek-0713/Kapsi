@@ -17,4 +17,5 @@ public interface DriverRepo extends JpaRepository<Driver, Integer> {
 	
 //	@Query("select d from Driver d where d.Cab.carType=?1")
 //	public List<Driver> getDriverByCab(String carType);
+
 }

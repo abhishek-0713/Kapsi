@@ -1,6 +1,9 @@
 package com.kapsi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Driver extends AbstractUser{
 
     @Id
