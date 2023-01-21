@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +25,7 @@ public class Driver extends AbstractUser{
     private Integer licenceNo;
     private Float rating;
 
-    @JsonIgnore
+    
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cabId" )
     private Cab cab;
