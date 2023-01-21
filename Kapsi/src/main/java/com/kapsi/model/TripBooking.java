@@ -3,7 +3,6 @@ package com.kapsi.model;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,15 +21,17 @@ public class TripBooking {
 	private LocalDateTime fromDateTime;
 	private LocalDateTime toDateTime;
 	private boolean status;
-	private float diatanceInKm;
+	private float distanceInKm;
 	private float bill;
 
 
-//	@OneToOne(cascade = CascadeType.ALL)
-//	private Customer customer;
+	@ManyToOne
+	@JoinColumn(name = "customerId")
+	private Customer customer;
 
-//	@OneToOne
-//	private Driver driver;
+	@ManyToOne
+	@JoinColumn(name = "driverId")
+	private Driver driver;
 	
 
 }

@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -20,6 +17,10 @@ public class Cab {
     private Integer cabId;
     private String carType;
     private Float perKmRate;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "driverId")
+    private Driver driver;
 
     public Cab(String carType, Float perKmRate) {
         this.carType = carType;

@@ -1,6 +1,10 @@
 package com.kapsi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Driver extends AbstractUser{
@@ -11,7 +15,13 @@ public class Driver extends AbstractUser{
     private Integer licenceNo;
     private Float rating;
 
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cabId" )
     private Cab cab;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "driver")
+    List<TripBooking> tripBookings = new ArrayList<>();
 
 }
