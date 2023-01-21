@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
 
     /* --------------------------------------   Login Exception    ----------------------------------------------*/
     @ExceptionHandler(LogInException.class)
-    public ResponseEntity<ErrorDetails> loginException(LogInException loginException, WebRequest request){
+    public ResponseEntity<ErrorDetails> logInException(LogInException loginException, WebRequest request){
 
         ErrorDetails err=new ErrorDetails(LocalDateTime.now(), loginException.getMessage(), request.getDescription(false));
 
@@ -25,26 +25,56 @@ public class GlobalExceptionHandler {
     }
 
 
-//    /*--------------------------------------------  Student Exception  --------------------------------------------------*/
-//    @ExceptionHandler(StudentException.class)
-//    public ResponseEntity<ErrorDetails> StudentNotFoundException(StudentException exception, WebRequest webRequest){
-//
-//        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), exception.getMessage(), webRequest.getDescription(false));
-//
-//        return new ResponseEntity<ErrorDetails>(errorDetails,HttpStatus.BAD_REQUEST);
-//    }
-//
-//
-//    /*--------------------------------------------  Course Exception  --------------------------------------------------*/
-//    @ExceptionHandler(CourseException.class)
-//    public ResponseEntity<ErrorDetails> CourseNotFoundException(CourseException exception, WebRequest webRequest){
-//
-//        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), exception.getMessage(), webRequest.getDescription(false));
-//
-//        return new ResponseEntity<ErrorDetails>(errorDetails,HttpStatus.BAD_REQUEST);
-//    }
-//
-//
+    /*--------------------------------------------  Admin Exception  --------------------------------------------------*/
+    @ExceptionHandler(AdminException.class)
+    public ResponseEntity<ErrorDetails> AdminException(AdminException exception, WebRequest webRequest){
+
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), exception.getMessage(), webRequest.getDescription(false));
+
+        return new ResponseEntity<ErrorDetails>(errorDetails,HttpStatus.BAD_REQUEST);
+    }
+
+
+    /*--------------------------------------------  Cab Exception  --------------------------------------------------*/
+    @ExceptionHandler(CabException.class)
+    public ResponseEntity<ErrorDetails> CabException(CabException exception, WebRequest webRequest){
+
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), exception.getMessage(), webRequest.getDescription(false));
+
+        return new ResponseEntity<ErrorDetails>(errorDetails,HttpStatus.BAD_REQUEST);
+    }
+
+
+    /*--------------------------------------------  Customer Exception  --------------------------------------------------*/
+    @ExceptionHandler(CustomerException.class)
+    public ResponseEntity<ErrorDetails> CustomerException(CustomerException exception, WebRequest webRequest){
+
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), exception.getMessage(), webRequest.getDescription(false));
+
+        return new ResponseEntity<ErrorDetails>(errorDetails,HttpStatus.BAD_REQUEST);
+    }
+
+
+    /*--------------------------------------------  Driver Exception  --------------------------------------------------*/
+    @ExceptionHandler(DriverException.class)
+    public ResponseEntity<ErrorDetails> DriverException(DriverException exception, WebRequest webRequest){
+
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), exception.getMessage(), webRequest.getDescription(false));
+
+        return new ResponseEntity<ErrorDetails>(errorDetails,HttpStatus.BAD_REQUEST);
+    }
+
+
+    /*--------------------------------------------  TripBooking Exception  --------------------------------------------------*/
+    @ExceptionHandler(TripBookingException.class)
+    public ResponseEntity<ErrorDetails> TripBookingException(TripBookingException exception, WebRequest webRequest){
+
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), exception.getMessage(), webRequest.getDescription(false));
+
+        return new ResponseEntity<ErrorDetails>(errorDetails,HttpStatus.BAD_REQUEST);
+    }
+
+
     /*--------------------------------------------  Exception  --------------------------------------------------*/
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> Exception(Exception exception, WebRequest webRequest){
