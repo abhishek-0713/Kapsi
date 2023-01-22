@@ -36,15 +36,17 @@ public class TripBookingServiceImpl implements TripBookingService{
 	public TripBooking insertTripBooking(String key, TripBooking tripBooking,Integer customerId) throws TripBookingException,LoginException{
 		// TODO Auto-generated method stub
 		CurrentUserSession currentUserSession=currentSessionRepo.findByUuid(key);
-		TripBooking tr=null;
 		if(currentUserSession==null) {
 			throw new LoginException("No User Login");
 			
 		}else {
 			Optional<Customer> customer=customerRepo.findById(customerId);
+			
 			if(customer.isPresent()) {
+			Customer cus=customer.get();	
 			List<TripBooking>bookings =customer.get().getTripBookings();
-			tr=bookings.get(bookings.size()-1);
+			if(bookings.size()>0) {
+			TripBooking tr=bookings.get(bookings.size()-1);
 			if(bookings.size()>0) {
 			  if(tr.getStatus()==false) {
 				throw new TripBookingException("Cannot Book another ... As trip is already in Progress");
@@ -53,13 +55,16 @@ public class TripBookingServiceImpl implements TripBookingService{
 			
 			tripBooking.setCustomer(tr.getCustomer());
 			tripBookingRepository.save(tripBooking);
+			return tripBooking;
+		    }else {
+		    	tripBooking.setCustomer(cus);
+		    	tripBookingRepository.save(tripBooking);
+		    }
+			}
+			return tripBooking;
 		}
-		}
-		if(tr==null) {
-			throw new TripBookingException("Not able to add trip");
-		}else {
-		return tr;
-		}
+			
+		
 		
 		
 	}
@@ -124,36 +129,30 @@ public class TripBookingServiceImpl implements TripBookingService{
 
 
 	@Override
-	public TripBooking calculateBill(String key,Integer customerId) throws TripBookingException,LoginException,CustomerException {
+	public TripBooking calculateBill(String key,Integer customerId,Integer tripBookingId) throws TripBookingException,LoginException,CustomerException {
 		// TODO Auto-generated method stub
 		CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
-		
-		TripBooking tripBooking=null;
+		TripBooking booking=null;
 		if(currentUserSession==null) {
 			throw new LoginException("No user Login");
 		}else {
-			Optional<Customer> optional=customerRepo.findById(customerId);
+			Optional<TripBooking> optional=tripBookingRepository.findById(tripBookingId);
 		if(optional.isPresent()) {
-			List<TripBooking> booking=optional.get().getTripBookings();
-			if(booking.size()>0) {
-			tripBooking=booking.get(booking.size()-1);
-			if(tripBooking.getStatus()==true) {
-				Driver driver=tripBooking.getDriver();
+			booking =optional.get();
+			if(booking.getStatus()==true) {
+				Driver driver=booking.getDriver();
 				Cab cab=driver.getCab();
-				tripBooking.setBill(tripBooking.getDistanceInKm()*cab.getPerKmRate());
-			}
+				booking.setBill(cab.getPerKmRate()*booking.getDistanceInKm());
 			}
 			
 			
+			
 		}else {
-			throw new CustomerException("Customer Not Found With Id "+customerId);
+			throw new TripBookingException("Trip Not Found With Id "+tripBookingId);
 		}
 		}
-		if(tripBooking==null) {
-			 throw new TripBookingException("No Trip Found");
-		}else {
-			return tripBooking;
-		}
+		
+		return booking;
 	}
 		
 }

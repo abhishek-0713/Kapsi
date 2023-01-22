@@ -13,6 +13,6 @@ public interface TripBookingService {
   public TripBooking updateTripBooking(String Key,TripBooking tripBooking) throws TripBookingException,LoginException;
   public TripBooking deleteTripBooking(String Key,Integer tripBookingId) throws TripBookingException,LoginException;
   public List<TripBooking> viewAllTripsCustomer(String Key,Integer customerId) throws TripBookingException,LoginException;
-  public TripBooking calculateBill(String Key,Integer customerId) throws TripBookingException,LoginException,CustomerException;
+  public TripBooking calculateBill(String Key,Integer customerId,Integer tripBookingId) throws TripBookingException,LoginException,CustomerException;
   
 }
