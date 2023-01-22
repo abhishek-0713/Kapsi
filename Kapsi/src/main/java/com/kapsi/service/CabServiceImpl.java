@@ -1,15 +1,20 @@
 package com.kapsi.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kapsi.exceptions.CabException;
 import com.kapsi.exceptions.DriverException;
+import com.kapsi.exceptions.LogInException;
 import com.kapsi.model.Cab;
+import com.kapsi.model.CurrentUserSession;
+import com.kapsi.model.Driver;
 import com.kapsi.repository.CabRepo;
+import com.kapsi.repository.CurrentSessionRepo;
+import com.kapsi.repository.DriverRepo;
 
 @Service
 public class CabServiceImpl implements CabService {
@@ -17,20 +22,12 @@ public class CabServiceImpl implements CabService {
 	@Autowired
 	private CabRepo cDao;
 	
-//	@Override
-//	public List<Cab> findByAvalibityStatus(Boolean avalibiltyStatus) {
-//		
-//		List<Cab> list = new ArrayList<>();
-//	
-//		if(avalibiltyStatus) {
-//			list = cDao.findByAvailbilityStatus(true);
-//		}
-//		else {
-//			list  = cDao.findByAvailbilityStatus(false);
-//		}
-//		
-//		return list;
-//	}
+	@Autowired
+	private DriverRepo dDao;
+	
+	@Autowired
+	private CurrentSessionRepo currentSessionRepo;
+	
 
 	@Override
 	public Cab registerCab(Cab cab) throws DriverException {
@@ -41,7 +38,12 @@ public class CabServiceImpl implements CabService {
 	}
 
 	@Override
-	public Cab updateCab(Integer cabId, Cab cab) throws DriverException {
+	public Cab updateCab(String key,Integer cabId, Cab cab) throws DriverException, LogInException {
+		
+		 CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+	        if(currentUserSession == null) {
+	            throw new LogInException("No User LoggedIn");
+	        }
 		
 		Optional<Cab> c = cDao.findById(cabId);
 		
@@ -69,7 +71,12 @@ public class CabServiceImpl implements CabService {
 	}
 
 	@Override
-	public Cab deleteCab(Integer cabId) throws DriverException {
+	public Cab deleteCab(String key,Integer cabId) throws DriverException, LogInException {
+		
+		 CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+	        if(currentUserSession == null) {
+	            throw new LogInException("No User LoggedIn");
+	        }
 		
 		Optional<Cab> c = cDao.findById(cabId);
 		
@@ -81,5 +88,19 @@ public class CabServiceImpl implements CabService {
 		
 		else
 			throw new DriverException("Cab Not Found By This Id :");
+	}
+
+	@Override
+	public Driver viewDriverByCabId(Integer cabId) throws CabException {
+		
+		 Optional<Driver> c = dDao.findById(cabId);
+		 
+		 if(c.isPresent()) {
+			 return c.get();
+		 }
+		 
+		 else
+			 throw new CabException("Cab Not Found By This Id :"+cabId);
+		
 	}
 }

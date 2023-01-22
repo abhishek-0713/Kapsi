@@ -6,9 +6,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kapsi.exceptions.CabException;
 import com.kapsi.exceptions.DriverException;
+import com.kapsi.exceptions.LogInException;
 import com.kapsi.model.Cab;
+import com.kapsi.model.CurrentUserSession;
 import com.kapsi.model.Driver;
+import com.kapsi.repository.CabRepo;
+import com.kapsi.repository.CurrentSessionRepo;
 import com.kapsi.repository.DriverRepo;
 
 @Service
@@ -17,30 +22,26 @@ public class DriverServiceImpl implements DriverService {
 	@Autowired
 	private DriverRepo dDao;
 	
+	@Autowired
+	private CabRepo cDao;
+	
+	@Autowired
+	private CurrentSessionRepo currentSessionRepo;
+	
 	@Override
 	public Driver registerDriver(Driver driver) throws DriverException {
 		
-		Cab cab = new Cab();
-		cab.setCarType(driver.getCab().getCarType());
-		cab.setPerKmRate(driver.getCab().getPerKmRate());
-		
-		Driver driver1 = new Driver();
-		
-		driver1.setUserName(driver.getUserName());
-		driver1.setPassword(driver.getPassword());
-		driver1.setAddress(driver.getAddress());
-		driver1.setEmail(driver.getEmail());
-		driver1.setMobileNumber(driver.getMobileNumber());
-		driver1.setLicenceNo(driver.getLicenceNo());
-		driver1.setRating(driver.getRating());
-		driver1.setCab(cab);
-		cab.setDriver(driver1);
-	
-		return dDao.save(driver1);
+		return dDao.save(driver);
 	}
 
 	@Override
-	public Driver updateDriver(Integer driverId,Driver driver) throws DriverException {
+	public Driver updateDriver(String key, Integer driverId,Driver driver) throws DriverException, LogInException {
+		
+		 CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+	        if(currentUserSession == null) {
+	            throw new LogInException("No User LoggedIn");
+	        }
+		
 		
 		Optional<Driver> d = dDao.findById(driverId);
 		
@@ -54,7 +55,12 @@ public class DriverServiceImpl implements DriverService {
 	}
 
 	@Override
-	public Driver getDriverById(Integer driverId) throws DriverException {
+	public Driver getDriverById(String key,Integer driverId) throws DriverException, LogInException {
+		
+		 CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+	        if(currentUserSession == null) {
+	            throw new LogInException("No User LoggedIn");
+	        }
 		
 		Optional<Driver> dri = dDao.findById(driverId);
 		
@@ -66,7 +72,12 @@ public class DriverServiceImpl implements DriverService {
 	}
 
 	@Override
-	public Driver getDriverByName(String userName) throws DriverException {
+	public Driver getDriverByName(String key,String userName) throws DriverException, LogInException {
+		
+		 CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+	        if(currentUserSession == null) {
+	            throw new LogInException("No User LoggedIn");
+	        }
 		
 		Optional<Driver> dri = dDao.getByName(userName);
 		
@@ -79,7 +90,12 @@ public class DriverServiceImpl implements DriverService {
 	}
 
 	@Override
-	public Driver deleteDriverById(Integer driverId) throws DriverException {
+	public Driver deleteDriverById(String key, Integer driverId) throws DriverException, LogInException{
+		
+		 CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+	        if(currentUserSession == null) {
+	            throw new LogInException("No User LoggedIn");
+	        }
 		
 		Optional<Driver> dri = dDao.findById(driverId);
 		
@@ -103,20 +119,47 @@ public class DriverServiceImpl implements DriverService {
 		return list;
 	}
 
-//	@Override
-//	public Driver getDriverByCab(String carType) throws DriverException {
-//		
-//		List<Driver> dri = dDao.getDriverByCab(carType);
-//		
-//		if(dri.isEmpty()) {
-//			throw new DriverException("Drivers Not Found By This Cab :" + carType);
-//		}
-//		else
-//		   
-//			return dri.get(0);
-//			
-//		
-//	}
+	@Override
+	public Driver allocateCabToDriver(Integer driverId, Integer cabId) throws DriverException, CabException {
+		
+		 Optional<Cab> cab = cDao.findById(cabId);
+		 Optional<Driver> driver = dDao.findById(driverId);
+		 
+		 if(cab.isPresent()) {
+			 if(driver.isPresent()) {
+		    
+				  Driver d = driver.get();
+				  Cab c = cab.get();
+				  c.setDriver(d);
+				  cDao.save(c);
+				  d.setCab(c);
+				  return dDao.save(d);
+			 }
+			 else {
+				 throw new DriverException("Driver Not Found With This Id :"+ driverId);
+			 }
+		 }
+		 else {
+			 throw new CabException("Cab Not Found By This Id :"+ cabId);
+		 }
+		 		 
+	}
+
+	@Override
+	public Cab viewCabByDriverId(Integer driverId) throws DriverException {
+		
+		Optional<Cab> d = cDao.findById(driverId);
+		
+		if(d.isPresent()) {
+			return d.get();
+		}
+		else
+			throw new DriverException("Driver Not Found By This Id :" + driverId);
+		
+	}
+
+
+
 
 	
 	
