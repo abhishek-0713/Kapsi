@@ -81,6 +81,7 @@ Kapsi is restful service for the Cab Booking Application with all neccessary API
 
 ## ER Diagram : 
 
+<img width="622" alt="ER" src="https://user-images.githubusercontent.com/77963675/213923642-96b6dcc2-8eb8-46f8-b6a1-06cecd729951.png">
 
 
 ## Swagger UI :
