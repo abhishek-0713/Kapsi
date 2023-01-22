@@ -2,6 +2,7 @@ package com.kapsi.service;
 
 import java.util.List;
 
+import com.kapsi.exceptions.CabException;
 import com.kapsi.exceptions.DriverException;
 import com.kapsi.model.Driver;
 
@@ -20,4 +21,5 @@ public interface DriverService {
 //	public Driver getDriverByCab(String carType)throws DriverException;
 	
 	public Driver deleteDriverById(Integer driverId)throws DriverException;
+
 }

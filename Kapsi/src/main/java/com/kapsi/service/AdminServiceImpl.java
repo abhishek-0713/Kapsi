@@ -133,7 +133,7 @@ public class AdminServiceImpl implements AdminService {
 
         Optional<Driver> driver = driverRepo.findById(driverId);
         if (driver.isEmpty()){
-            throw new DriverException("No Driver Found With Cab ID : " + driverId);
+            throw new DriverException("No Driver Found With Driver ID : " + driverId);
         }
 
         List<TripBooking> tripBookings = driver.get().getTripBookings();

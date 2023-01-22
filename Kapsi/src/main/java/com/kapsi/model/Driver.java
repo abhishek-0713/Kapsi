@@ -21,17 +21,27 @@ public class Driver extends AbstractUser{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    @Column(name = "driver_id")
     private Integer driverId;
     private Integer licenceNo;
     private Float rating;
 
-    
+
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cabId" )
+    @JoinColumn(name = "cab_id" )
     private Cab cab;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "driver")
     List<TripBooking> tripBookings = new ArrayList<>();
+
+
+    public Driver(String userName, String password, String address, String mobileNumber, String email, Integer licenceNo, Float rating) {
+        super(userName, password, address, mobileNumber, email);
+        this.licenceNo = licenceNo;
+        this.rating = rating;
+    }
 
 }
