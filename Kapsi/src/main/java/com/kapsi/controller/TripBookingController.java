@@ -20,14 +20,14 @@ public class TripBookingController {
 	@Autowired
 	private TripBookingService tripBookingService;
 	
-//	@PostMapping("/saveTrip")
-//	public ResponseEntity<TripBooking> saveTrip(@RequestParam String Key,@RequestBody TripBooking tripBooking) throws TripBookingException, LoginException{
-//		TripBooking tb=tripBookingService.insertTripBooking(Key,tripBooking);
-//		
-//		return new ResponseEntity<>(tb,HttpStatus.CREATED);
-//		
-//		
-//		
-//	}
+	@PostMapping("/saveTrip")
+	public ResponseEntity<TripBooking> saveTrip(@RequestParam String Key,@RequestParam Integer customerId,@RequestBody TripBooking tripBooking) throws TripBookingException, LoginException{
+		TripBooking tb=tripBookingService.insertTripBooking(Key,tripBooking,customerId);
+		
+		return new ResponseEntity<>(tb,HttpStatus.CREATED);
+		
+		
+		
+	}
 
 }
