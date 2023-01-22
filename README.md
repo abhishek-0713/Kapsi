@@ -88,4 +88,21 @@ Kapsi is restful service for the Cab Booking Application with all neccessary API
 ### server url
 `` http://localhost:8484/swagger-ui/index.html ``
 
-### Schema
+### Controllers
+
+### Login Controller
+![Screenshot 2023-01-22 204331](https://user-images.githubusercontent.com/105943862/213923455-0b5390b5-00fa-4d97-972b-dec876f0af15.png)
+
+
+### Admin Controller
+![Screenshot 2023-01-22 204239](https://user-images.githubusercontent.com/105943862/213923473-233f5ac6-80a4-46b9-ac4b-b0a122a081ef.png)
+
+
+### Customer Controller
+![Screenshot 2023-01-22 204147](https://user-images.githubusercontent.com/105943862/213923508-3d0dd521-edec-477e-90c1-2445227edd90.png)
+
+
+### Driver Controller
+![Screenshot 2023-01-22 204120](https://user-images.githubusercontent.com/105943862/213923522-fa2918f5-17f9-4eec-bea7-c081d08fd598.png)
+
+
