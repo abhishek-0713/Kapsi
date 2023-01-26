@@ -20,87 +20,98 @@ import com.kapsi.repository.DriverRepo;
 public class CabServiceImpl implements CabService {
 
 	@Autowired
-	private CabRepo cDao;
+	private CabRepo cabRepo;
 	
 	@Autowired
-	private DriverRepo dDao;
+	private DriverRepo driverRepo;
 	
 	@Autowired
 	private CurrentSessionRepo currentSessionRepo;
-	
 
+
+	/*-------------------------------- Add Cab Implementation ---------------------------------*/
 	@Override
 	public Cab registerCab(Cab cab) throws DriverException {
 		
-		Cab c = cDao.save(cab);
-		
-		return c;
+		Cab registerCab = cabRepo.save(cab);
+		return registerCab;
 	}
 
+
+	/*-------------------------------- Update Admin Implementation ---------------------------------*/
 	@Override
 	public Cab updateCab(String key,Integer cabId, Cab cab) throws DriverException, LogInException {
+
+		CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+		if(currentUserSession == null) {
+			throw new LogInException("No User LoggedIn");
+		}
 		
-		 CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
-	        if(currentUserSession == null) {
-	            throw new LogInException("No User LoggedIn");
-	        }
-		
-		Optional<Cab> c = cDao.findById(cabId);
-		
-		if(c.isPresent()) {
-			Cab updateCab =  c.get();
-			cDao.save(updateCab);
+		Optional<Cab> cabOptional = cabRepo.findById(cabId);
+		if(cabOptional.isPresent()) {
+			Cab updateCab =  cabOptional.get();
+			cabRepo.save(updateCab);
 			return updateCab;
 		}
-		else 
-			
-		   throw new DriverException("Cab Not Found By This Id :" + cabId);
+		throw new DriverException("Cab Not Found By This Id :" + cabId);
 		
 	}
 
+
+	/*-------------------------------- Get All Cabs Implementation ---------------------------------*/
 	@Override
-	public List<Cab> getAllCabs() throws DriverException {
-		
-		List<Cab> all = cDao.findAll();
-		
-		if(all.isEmpty()) {
+	public List<Cab> getAllCabs(String key) throws DriverException, LogInException {
+
+		CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+		if(currentUserSession == null) {
+			throw new LogInException("No User LoggedIn");
+		}
+
+		List<Cab> allCabs = cabRepo.findAll();
+		if(allCabs.isEmpty()) {
 			throw new DriverException("Cabs Data Not Found :");
 		}
 		
-		return all;
+		return allCabs;
 	}
 
+
+	/*-------------------------------- Delete Cab Implementation ---------------------------------*/
 	@Override
 	public Cab deleteCab(String key,Integer cabId) throws DriverException, LogInException {
-		
-		 CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
-	        if(currentUserSession == null) {
-	            throw new LogInException("No User LoggedIn");
-	        }
-		
-		Optional<Cab> c = cDao.findById(cabId);
-		
-		if(c.isPresent()) {
-			Cab update = c.get();
-			cDao.delete(update);
-			return update;
+
+		CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+		if(currentUserSession == null) {
+			throw new LogInException("No User LoggedIn");
 		}
 		
-		else
-			throw new DriverException("Cab Not Found By This Id :");
+		Optional<Cab> cabOptional = cabRepo.findById(cabId);
+		
+		if(cabOptional.isPresent()) {
+			Cab update = cabOptional.get();
+			cabRepo.delete(update);
+			return update;
+		}
+		throw new DriverException("Cab Not Found By This Id :");
 	}
 
+
+	/*-------------------------------- View Cab Implementation ---------------------------------*/
 	@Override
-	public Driver viewDriverByCabId(Integer cabId) throws CabException {
-		
-		 Optional<Driver> c = dDao.findById(cabId);
-		 
-		 if(c.isPresent()) {
-			 return c.get();
+	public Driver viewDriverByCabId(String key, Integer cabId) throws CabException, LogInException {
+
+		CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+		if(currentUserSession == null) {
+			throw new LogInException("No User LoggedIn");
+		}
+
+		 Optional<Driver> optionalDriver = driverRepo.findById(cabId);
+		 if(optionalDriver.isPresent()) {
+			 return optionalDriver.get();
 		 }
-		 
-		 else
-			 throw new CabException("Cab Not Found By This Id :"+cabId);
+		 throw new CabException("Cab Not Found By This Id :"+cabId);
 		
 	}
+
+
 }

@@ -1,12 +1,6 @@
 package com.kapsi.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -35,6 +29,10 @@ public class Cab {
     @Min(6)
     @Max(21)
     private Float perKmRate;
+<<<<<<< HEAD
+
+=======
+>>>>>>> 3c0ed21977978892e62b056d663775857614357c
     
     @NotNull
     private boolean avalibilityStatus;

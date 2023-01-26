@@ -1,7 +1,5 @@
 package com.kapsi.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,79 +28,62 @@ public class DriverController {
 
 	
 	@Autowired
-	private DriverService dService;
-	
-	@PostMapping("/register")
-	public ResponseEntity<Driver> registerDriverHandller(@Valid @RequestBody Driver driver) throws DriverException{
+	private DriverService driverService;
+
+
+	/************************************************  Driver Services  ********************************************************/
+
+
+	/*--------------------------------------------   Add Driver Account  ------------------------------------------------*/
+	@PostMapping("/create")
+	public ResponseEntity<Driver> registerDriverHandler(@Valid @RequestBody Driver driver) throws DriverException{
 		
-		Driver dri = dService.registerDriver(driver);
-		
-		return new ResponseEntity<>(dri,HttpStatus.CREATED);
+		Driver registerDriver = driverService.registerDriver(driver);
+		return new ResponseEntity<>(registerDriver, HttpStatus.CREATED);
 		
 	}
-	
-	
+
+
+	/*--------------------------------------------   Update Driver Account  ------------------------------------------------*/
 	@PutMapping("/update/{driverId}")
-	public ResponseEntity<Driver> registerDriverHandller(@RequestParam String key, @PathVariable("driverId") Integer driverId, @RequestBody Driver driver) throws DriverException, LogInException{
+	public ResponseEntity<Driver> updateDriverHandler(@RequestParam String key, @PathVariable("driverId") Integer driverId, @RequestBody Driver driver) throws DriverException, LogInException{
 		
-		Driver dri = dService.updateDriver(key,driverId, driver);
-		
-		return new ResponseEntity<>(dri,HttpStatus.ACCEPTED);
-		
-	}
-	
-	
-	@GetMapping("/getById/{driverId}")
-	public ResponseEntity<Driver> getByIdDriverHandller(@RequestParam String key,@PathVariable("driverId") Integer driverId) throws DriverException, LogInException{
-		
-		Driver dri = dService.getDriverById(key,driverId);
-		
-		return new ResponseEntity<>(dri,HttpStatus.ACCEPTED);
+		Driver updateDriver = driverService.updateDriver(key,driverId, driver);
+		return new ResponseEntity<>(updateDriver, HttpStatus.ACCEPTED);
 		
 	}
-	
-	@GetMapping("/getByName/{userName}")
-	public ResponseEntity<Driver> getByNameDriverHandller(@RequestParam String key,@PathVariable("userName") String userName) throws DriverException, LogInException{
+
+
+	/*--------------------------------------------   Delete Driver Account  ------------------------------------------------*/
+	@DeleteMapping("/delete/{driverId}")
+	public ResponseEntity<Driver> deleteByDriverIdHandler(@RequestParam String key, @PathVariable("driverId") Integer driverId) throws DriverException, LogInException{
 		
-		Driver dri = dService.getDriverByName(key,userName);
-		
-		return new ResponseEntity<>(dri,HttpStatus.ACCEPTED);
-		
-	}
-	
-	@DeleteMapping("/deleteById/{driverId}")
-	public ResponseEntity<Driver> deleteByDriverIdHandller(@RequestParam String key,@PathVariable("driverId") Integer driverId) throws DriverException, LogInException{
-		
-		Driver dri = dService.deleteDriverById(key,driverId);
-		
-		return new ResponseEntity<>(dri,HttpStatus.ACCEPTED);
+		Driver deleteDriver = driverService.deleteDriverById(key,driverId);
+		return new ResponseEntity<>(deleteDriver, HttpStatus.OK);
 		
 	}
-	
-	@GetMapping("/getAllDriver")
-	public ResponseEntity<List<Driver>> getAllDriverHandller() throws DriverException{
-		
-		List<Driver> dri = dService.getAllDriver();
-		
-		return new ResponseEntity<>(dri,HttpStatus.ACCEPTED);
-		
+
+
+
+	/************************************************  Cab Services  ********************************************************/
+
+
+	/*--------------------------------------------   Allocate Driver TO Cab  ------------------------------------------------*/
+	@PutMapping("/allocate/cab")
+	public ResponseEntity<Driver> allocateDriverHandler(@RequestParam String key, @RequestParam Integer cabId, @RequestParam Integer driverId) throws DriverException, CabException, LogInException {
+    	 
+    	  Driver allocateCabToDriver = driverService.allocateCabToDriver(key, driverId, cabId);
+    	  return new ResponseEntity<>(allocateCabToDriver, HttpStatus.ACCEPTED);
 	}
-	
-     @PutMapping("/allocate")
-    public ResponseEntity<Driver> allocateDriverHandller(@RequestParam Integer cabId, @RequestParam Integer driverId) throws DriverException, CabException{
+
+
+	/*--------------------------------------------   Get Cab Details   ------------------------------------------------*/
+	@GetMapping("/cab")
+	public ResponseEntity<Cab> getCabByDriver(@RequestParam String key, @RequestParam Integer cabId) throws DriverException, LogInException {
     	 
-    	  Driver d = dService.allocateCabToDriver(driverId, cabId);
+    	 Cab cab = driverService.viewCabByDriverId(key, cabId);
+    	 return new ResponseEntity<>(cab, HttpStatus.OK);
     	 
-    	  return new ResponseEntity<>(d,HttpStatus.ACCEPTED);
-     }
-	
-      @GetMapping("/getCab")
-     public ResponseEntity<Cab> getCabyDriverIdHandller(@RequestParam Integer driverId) throws DriverException{
-    	 
-    	 Cab c = dService.viewCabByDriverId(driverId);
-    	 
-    	 return new ResponseEntity<>(c,HttpStatus.CREATED);
-    	 
-     }
+	}
 	
 }

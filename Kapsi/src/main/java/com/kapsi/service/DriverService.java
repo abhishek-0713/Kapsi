@@ -18,12 +18,20 @@ public interface DriverService {
 	
 	public Driver getDriverByName(String key, String userName)throws DriverException, LogInException;
 	
-	public Driver allocateCabToDriver(Integer driverId,Integer cabId)throws DriverException, CabException;
+	public Driver allocateCabToDriver(String key, Integer driverId, Integer cabId) throws DriverException, CabException, LogInException;
 	
-	public Cab viewCabByDriverId(Integer DriverId)throws DriverException;
+	public Cab viewCabByDriverId(String key, Integer DriverId) throws DriverException, LogInException;
 	
+<<<<<<< HEAD
+	public List<Driver> getAllDriver(String key) throws DriverException, LogInException;
+
+//	public Driver getDriverByCab(String carType)throws DriverException;
+
+	public Driver deleteDriverById(String key, Integer driverId)throws DriverException, LogInException;
+=======
 	public List<Driver> getAllDriver()throws DriverException;
 	
 	public Driver deleteDriverById(String key, Integer driverId)throws DriverException, LogInException;
 
+>>>>>>> 3c0ed21977978892e62b056d663775857614357c
 }

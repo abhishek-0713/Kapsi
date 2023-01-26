@@ -3,18 +3,8 @@ package com.kapsi.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,7 +20,6 @@ public class Driver extends AbstractUser{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     @Column(name = "driver_id")
     private Integer driverId;
     
@@ -53,10 +42,9 @@ public class Driver extends AbstractUser{
     List<TripBooking> tripBookings = new ArrayList<>();
 
 
-    public Driver(String userName, String password, String address, String mobileNumber, String email, Integer licenceNo, Float rating) {
+    public Driver(String userName, @NotNull @Size(min = 8, message = "password should be minimum 8 characters") String password, @NotNull String address, @NotNull @Pattern(regexp = "[6789]{1}[0-9]{9}", message = "Enter valid 10 digit mobile number") String mobileNumber, @NotNull @Email String email, String licenceNo, Float rating) {
         super(userName, password, address, mobileNumber, email);
         this.licenceNo = licenceNo;
         this.rating = rating;
     }
-
 }

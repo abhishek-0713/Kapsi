@@ -8,13 +8,11 @@ import com.kapsi.repository.CabRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kapsi.exceptions.CabException;
 import com.kapsi.exceptions.DriverException;
 import com.kapsi.exceptions.LogInException;
 import com.kapsi.model.Cab;
 import com.kapsi.model.CurrentUserSession;
 import com.kapsi.model.Driver;
-import com.kapsi.repository.CabRepo;
 import com.kapsi.repository.CurrentSessionRepo;
 import com.kapsi.repository.DriverRepo;
 
@@ -23,114 +21,136 @@ public class DriverServiceImpl implements DriverService {
 
 	@Autowired
 	private DriverRepo driverRepo;
-
+	
 	@Autowired
 	private CabRepo cabRepo;
 	
 	@Autowired
-	private CabRepo cDao;
-	
-	@Autowired
 	private CurrentSessionRepo currentSessionRepo;
-	
+
+
+	/*-------------------------------- Add Driver Account Implementation ---------------------------------*/
 	@Override
 	public Driver registerDriver(Driver driver) throws DriverException {
+<<<<<<< HEAD
+
+		return driverRepo.save(driver);
+=======
   
 		return driverRepo.save(driver1);
 
+>>>>>>> 3c0ed21977978892e62b056d663775857614357c
 	}
 
+
+	/*-------------------------------- Update Driver Account Implementation ---------------------------------*/
 	@Override
 	public Driver updateDriver(String key, Integer driverId,Driver driver) throws DriverException, LogInException {
+
+		CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+		if(currentUserSession == null) {
+			throw new LogInException("No User LoggedIn");
+		}
 		
-		 CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
-	        if(currentUserSession == null) {
-	            throw new LogInException("No User LoggedIn");
-	        }
 		
+		Optional<Driver> optionalDriver = driverRepo.findById(driverId);
 		
-		Optional<Driver> d = driverRepo.findById(driverId);
-		
-		if(d.isPresent()) {
-			 Driver update = d.get();
+		if(optionalDriver.isPresent()) {
+			 Driver update = optionalDriver.get();
 			 driverRepo.save(update);
 			 return update;
 		}
-		else
-	        throw new DriverException("Driver Not Found By This Id :"+driverId);	
+		throw new DriverException("Driver Not Found By This Id :"+driverId);
 	}
 
+
+	/*-------------------------------- Update Driver Account Implementation ---------------------------------*/
 	@Override
 	public Driver getDriverById(String key,Integer driverId) throws DriverException, LogInException {
-		
-		 CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
-	        if(currentUserSession == null) {
-	            throw new LogInException("No User LoggedIn");
-	        }
-		
-		Optional<Driver> dri = driverRepo.findById(driverId);
-		
-		if(dri.isPresent()) {
-			return dri.get();
+
+		CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+		if(currentUserSession == null) {
+			throw new LogInException("No User LoggedIn");
 		}
-		else
-			throw new DriverException("Driver Not Found By This Id :"+driverId);	
+		
+		Optional<Driver> optionalDriver = driverRepo.findById(driverId);
+		
+		if(optionalDriver.isPresent()) {
+			return optionalDriver.get();
+		}
+		throw new DriverException("Driver Not Found By This Id :"+driverId);
 	}
 
+
+	/*-------------------------------- Get Driver Implementation [ Name ] ---------------------------------*/
 	@Override
 	public Driver getDriverByName(String key,String userName) throws DriverException, LogInException {
-		
-		 CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
-	        if(currentUserSession == null) {
-	            throw new LogInException("No User LoggedIn");
-	        }
-		
-		Optional<Driver> dri = driverRepo.getByName(userName);
-		
-		if(dri.isPresent()) {
-			return dri.get();
+
+		CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+		if(currentUserSession == null) {
+			throw new LogInException("No User LoggedIn");
 		}
 		
-		else
-			throw new DriverException("Driver Not Found By This Name :"+ userName);
+		Optional<Driver> optionalDriver = driverRepo.getByName(userName);
+		
+		if(optionalDriver.isPresent()) {
+			return optionalDriver.get();
+		}
+		throw new DriverException("Driver Not Found By This Name :"+ userName);
+
 	}
 
+
+	/*-------------------------------- Delete Driver Account Implementation ---------------------------------*/
 	@Override
-	public Driver deleteDriverById(String key, Integer driverId) throws DriverException, LogInException{
+	public Driver deleteDriverById(String key, Integer driverId) throws DriverException, LogInException {
 		
 		 CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
-	        if(currentUserSession == null) {
-	            throw new LogInException("No User LoggedIn");
-	        }
+		 if(currentUserSession == null) {
+			 throw new LogInException("No User LoggedIn");
+		 }
 		
-		Optional<Driver> dri = driverRepo.findById(driverId);
-		
-		if(dri.isEmpty()){
+		Optional<Driver> optionalDriver = driverRepo.findById(driverId);
+		if(optionalDriver.isEmpty()){
 			throw new DriverException("Driver Not Found By This Id :"+driverId);
 		}
-		 Driver d = dri.get();
-		 driverRepo.delete(d);
-		return d;
+		 Driver deleteDriver = optionalDriver.get();
+		 driverRepo.delete(deleteDriver);
+
+		 return deleteDriver;
+
 	}
 
 
+	/*-------------------------------- Gel All Drivers Account Implementation ---------------------------------*/
 	@Override
-	public List<Driver> getAllDriver() throws DriverException {
-		
-		List<Driver> list = driverRepo.findAll();
-		
-		if(list.isEmpty()) {
+	public List<Driver> getAllDriver(String key) throws DriverException, LogInException {
+
+		CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+		if(currentUserSession == null) {
+			throw new LogInException("No User LoggedIn");
+		}
+
+		List<Driver> drivers = driverRepo.findAll();
+		if(drivers.isEmpty()) {
 			throw new DriverException("DriverData Not Found");
 		}
 		
-		return list;
+		return drivers;
 	}
 
+
+	/*-------------------------------- Allocate Cab to Driver Account Implementation ---------------------------------*/
 	@Override
-	public Driver allocateCabToDriver(Integer driverId, Integer cabId) throws DriverException, CabException {
-		
-		 Optional<Cab> cab = cDao.findById(cabId);
-		 Optional<Driver> driver = dDao.findById(driverId);
+	public Driver allocateCabToDriver(String key, Integer driverId, Integer cabId) throws DriverException, CabException, LogInException {
+
+		CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+		if(currentUserSession == null) {
+			throw new LogInException("No User LoggedIn");
+		}
+
+		 Optional<Cab> cab = cabRepo.findById(cabId);
+		 Optional<Driver> driver = driverRepo.findById(driverId);
 		 
 		 if(cab.isPresent()) {
 			 if(driver.isPresent()) {
@@ -138,9 +158,9 @@ public class DriverServiceImpl implements DriverService {
 				  Driver d = driver.get();
 				  Cab c = cab.get();
 				  c.setDriver(d);
-				  cDao.save(c);
+				  cabRepo.save(c);
 				  d.setCab(c);
-				  return dDao.save(d);
+				  return driverRepo.save(d);
 			 }
 			 else {
 				 throw new DriverException("Driver Not Found With This Id :"+ driverId);
@@ -152,18 +172,27 @@ public class DriverServiceImpl implements DriverService {
 		 		 
 	}
 
+
+	/*-------------------------------- View Cab [ DriverId ] Account Implementation ---------------------------------*/
 	@Override
-	public Cab viewCabByDriverId(Integer driverId) throws DriverException {
-		
-		Optional<Cab> d = cDao.findById(driverId);
-		
-		if(d.isPresent()) {
-			return d.get();
+	public Cab viewCabByDriverId(String key, Integer driverId) throws DriverException, LogInException {
+
+		CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+		if(currentUserSession == null) {
+			throw new LogInException("No User LoggedIn");
 		}
-		else
-			throw new DriverException("Driver Not Found By This Id :" + driverId);
+
+		Optional<Cab> cabOptional = cabRepo.findById(driverId);
+		
+		if(cabOptional.isPresent()) {
+			return cabOptional.get();
+		}
+		throw new DriverException("Driver Not Found By This Id :" + driverId);
 		
 	}
+<<<<<<< HEAD
+=======
 
+>>>>>>> 3c0ed21977978892e62b056d663775857614357c
 	
 }
