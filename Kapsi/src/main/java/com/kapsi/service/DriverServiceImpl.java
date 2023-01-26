@@ -32,8 +32,14 @@ public class DriverServiceImpl implements DriverService {
 	/*-------------------------------- Add Driver Account Implementation ---------------------------------*/
 	@Override
 	public Driver registerDriver(Driver driver) throws DriverException {
+<<<<<<< HEAD
 
 		return driverRepo.save(driver);
+=======
+  
+		return driverRepo.save(driver1);
+
+>>>>>>> 3c0ed21977978892e62b056d663775857614357c
 	}
 
 
@@ -184,5 +190,9 @@ public class DriverServiceImpl implements DriverService {
 		throw new DriverException("Driver Not Found By This Id :" + driverId);
 		
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3c0ed21977978892e62b056d663775857614357c
 	
 }

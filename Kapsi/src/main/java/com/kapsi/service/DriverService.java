@@ -22,9 +22,16 @@ public interface DriverService {
 	
 	public Cab viewCabByDriverId(String key, Integer DriverId) throws DriverException, LogInException;
 	
+<<<<<<< HEAD
 	public List<Driver> getAllDriver(String key) throws DriverException, LogInException;
 
 //	public Driver getDriverByCab(String carType)throws DriverException;
 
 	public Driver deleteDriverById(String key, Integer driverId)throws DriverException, LogInException;
+=======
+	public List<Driver> getAllDriver()throws DriverException;
+	
+	public Driver deleteDriverById(String key, Integer driverId)throws DriverException, LogInException;
+
+>>>>>>> 3c0ed21977978892e62b056d663775857614357c
 }

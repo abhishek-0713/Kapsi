@@ -29,7 +29,10 @@ public class Cab {
     @Min(6)
     @Max(21)
     private Float perKmRate;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3c0ed21977978892e62b056d663775857614357c
     
     @NotNull
     private boolean avalibilityStatus;
@@ -43,6 +46,6 @@ public class Cab {
     public Cab(String carType, Float perKmRate) {
         this.carType = carType;
         this.perKmRate = perKmRate;
-//        this.availabilityStatus = availabilityStatus;
+   //     this.availabilityStatus = availabilityStatus;
     }
 }

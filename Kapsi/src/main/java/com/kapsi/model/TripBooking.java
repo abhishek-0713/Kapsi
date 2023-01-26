@@ -29,11 +29,12 @@ public class TripBooking {
 	private float distanceInKm;
 	private float bill;
 
-    @JsonIgnore
+  @JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "customerId")
 	private Customer customer;
-    @JsonIgnore
+  
+  @JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "driverId")
 	private Driver driver;
