@@ -3,6 +3,8 @@ package com.kapsi.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.kapsi.exceptions.CabException;
+import com.kapsi.repository.CabRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,10 @@ import com.kapsi.repository.DriverRepo;
 public class DriverServiceImpl implements DriverService {
 
 	@Autowired
-	private DriverRepo dDao;
+	private DriverRepo driverRepo;
+
+	@Autowired
+	private CabRepo cabRepo;
 	
 	@Autowired
 	private CabRepo cDao;
@@ -30,8 +35,9 @@ public class DriverServiceImpl implements DriverService {
 	
 	@Override
 	public Driver registerDriver(Driver driver) throws DriverException {
-		
-		return dDao.save(driver);
+  
+		return driverRepo.save(driver1);
+
 	}
 
 	@Override
@@ -43,11 +49,11 @@ public class DriverServiceImpl implements DriverService {
 	        }
 		
 		
-		Optional<Driver> d = dDao.findById(driverId);
+		Optional<Driver> d = driverRepo.findById(driverId);
 		
 		if(d.isPresent()) {
 			 Driver update = d.get();
-			 dDao.save(update);
+			 driverRepo.save(update);
 			 return update;
 		}
 		else
@@ -62,7 +68,7 @@ public class DriverServiceImpl implements DriverService {
 	            throw new LogInException("No User LoggedIn");
 	        }
 		
-		Optional<Driver> dri = dDao.findById(driverId);
+		Optional<Driver> dri = driverRepo.findById(driverId);
 		
 		if(dri.isPresent()) {
 			return dri.get();
@@ -79,7 +85,7 @@ public class DriverServiceImpl implements DriverService {
 	            throw new LogInException("No User LoggedIn");
 	        }
 		
-		Optional<Driver> dri = dDao.getByName(userName);
+		Optional<Driver> dri = driverRepo.getByName(userName);
 		
 		if(dri.isPresent()) {
 			return dri.get();
@@ -97,20 +103,21 @@ public class DriverServiceImpl implements DriverService {
 	            throw new LogInException("No User LoggedIn");
 	        }
 		
-		Optional<Driver> dri = dDao.findById(driverId);
+		Optional<Driver> dri = driverRepo.findById(driverId);
 		
 		if(dri.isEmpty()){
 			throw new DriverException("Driver Not Found By This Id :"+driverId);
 		}
 		 Driver d = dri.get();
-		 dDao.delete(d);
+		 driverRepo.delete(d);
 		return d;
 	}
+
 
 	@Override
 	public List<Driver> getAllDriver() throws DriverException {
 		
-		List<Driver> list = dDao.findAll();
+		List<Driver> list = driverRepo.findAll();
 		
 		if(list.isEmpty()) {
 			throw new DriverException("DriverData Not Found");
@@ -158,9 +165,5 @@ public class DriverServiceImpl implements DriverService {
 		
 	}
 
-
-
-
-	
 	
 }

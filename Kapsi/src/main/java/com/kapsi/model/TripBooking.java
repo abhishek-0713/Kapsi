@@ -1,5 +1,6 @@
 package com.kapsi.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
@@ -22,19 +23,18 @@ public class TripBooking {
 	private Integer tripBookingId;
 	private String fromLocation;
 	private String toLocation;
-	private LocalDateTime fromDateTime;
-	private LocalDateTime toDateTime;
-	
-	
+	private LocalDate fromDateTime;
+	private LocalDate toDateTime;
 	private boolean status;
 	private float distanceInKm;
 	private float bill;
 
-    @JsonIgnore
+  @JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "customerId")
 	private Customer customer;
-    @JsonIgnore
+  
+  @JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "driverId")
 	private Driver driver;

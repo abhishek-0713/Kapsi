@@ -25,6 +25,8 @@ public class Cab {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
+    @Column(name = "cab_id")
     private Integer cabId;
    
     @NotNull
@@ -37,10 +39,15 @@ public class Cab {
     @NotNull
     private boolean avalibilityStatus;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "driverId")
     @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "driver_id")
     private Driver driver;
 
 
+    public Cab(String carType, Float perKmRate) {
+        this.carType = carType;
+        this.perKmRate = perKmRate;
+   //     this.availabilityStatus = availabilityStatus;
+    }
 }
