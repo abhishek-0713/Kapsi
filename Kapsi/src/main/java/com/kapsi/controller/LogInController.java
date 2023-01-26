@@ -1,7 +1,6 @@
 package com.kapsi.controller;
 
 import com.kapsi.exceptions.LogInException;
-import com.kapsi.model.Customer;
 import com.kapsi.model.UserLogin;
 import com.kapsi.service.CustomerService;
 import com.kapsi.service.LoginService;
@@ -11,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/kapsi")
 public class LogInController {
 
     @Autowired

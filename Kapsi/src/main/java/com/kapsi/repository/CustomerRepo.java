@@ -14,4 +14,5 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
 
     @Query("FROM Customer c WHERE c.mobileNumber=?1")
     public Customer findCustomerByMobile(String mobileNumber);
+
 }

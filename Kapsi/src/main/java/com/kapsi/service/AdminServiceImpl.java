@@ -147,7 +147,12 @@ public class AdminServiceImpl implements AdminService {
 
     /*-------------------------------- Get Trips By Customer Implementation ---------------------------------*/
     @Override
-    public List<TripBooking> getAllTrips() throws TripBookingException, CustomerException, LogInException {
+    public List<TripBooking> getAllTrips(String key) throws TripBookingException, CustomerException, LogInException {
+
+        CurrentUserSession currentUserSession = currentSessionRepo.findByUuid(key);
+        if(currentUserSession == null) {
+            throw new LogInException("No User LoggedIn");
+        }
 
         List<TripBooking> tripBookings = tripBookingRepo.findAll();
         if (tripBookings.isEmpty()){

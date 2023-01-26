@@ -2,9 +2,14 @@ package com.kapsi.controller;
 
 import java.util.List;
 
+import javax.security.auth.login.LoginException;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 
+import com.kapsi.exceptions.DriverException;
+import com.kapsi.exceptions.TripBookingException;
+import com.kapsi.model.TripBooking;
+import com.kapsi.service.TripBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +35,15 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private TripBookingService tripBookingService;
+
+
+    /************************************************  Customer Services  ********************************************************/
+
+
     /*--------------------------------------------   Add Customer Account  ------------------------------------------------*/
-    @PostMapping("/add")
+    @PostMapping("/create")
     public ResponseEntity<Customer> createAccount(@Valid @RequestBody Customer customer) throws ValidationException, LogInException {
 
         if (customer == null){
@@ -39,37 +51,97 @@ public class CustomerController {
         }
         return new ResponseEntity<Customer>(customerService.insertCustomer(customer), HttpStatus.CREATED);
     }
-    
-    
+
+
+    /*--------------------------------------------   Update Customer Account  ------------------------------------------------*/
     @PutMapping("/update")
-    public ResponseEntity<Customer> updateCustomer( @RequestBody Customer customer, @RequestParam String mobileNumber) throws CustomerException{
+    public ResponseEntity<Customer> updateCustomer(@RequestParam String key, @RequestBody Customer customer, @RequestParam String mobileNumber) throws CustomerException, LogInException {
     	
-    	Customer customer2 = customerService.updateCustomer(customer, mobileNumber);
-    	return new ResponseEntity<Customer>(customer2, HttpStatus.ACCEPTED);
+    	Customer updateCustomer = customerService.updateCustomer(key, customer, mobileNumber);
+    	return new ResponseEntity<Customer>(updateCustomer, HttpStatus.ACCEPTED);
     }
-    
-    
-    @GetMapping("/all")
-    public ResponseEntity<List<Customer>> getAllCustomers() throws CustomerException{
-    	
-    	return new ResponseEntity<List<Customer>>(customerService.getAllCustomer(), HttpStatus.OK);
-    }
-    
+
+
+    /*--------------------------------------------   View Customer Account  ------------------------------------------------*/
     @GetMapping("/details")
-    public ResponseEntity<Customer> viweCustomer(@RequestParam Integer customerId) throws CustomerException{
-    	
-    	return new ResponseEntity<Customer>(customerService.viweCustomer(customerId), HttpStatus.OK);
-    }
-    
-    @DeleteMapping("/delete")
-    public ResponseEntity<Customer> deleteCustomer(@RequestParam Integer customerId) throws CustomerException{
-    	
-    	Customer customer = customerService.deleteCustomer(customerId);
-    	
+    public ResponseEntity<Customer> viewCustomer(@RequestParam String key,@RequestParam Integer customerId) throws CustomerException, LogInException {
+
+        Customer customer = customerService.viweCustomer(key, customerId);
     	return new ResponseEntity<Customer>(customer, HttpStatus.OK);
-    	
- 	 
     }
-    
-    
+
+
+    /*--------------------------------------------   Delete Customer Account  ------------------------------------------------*/
+    @DeleteMapping("/delete")
+    public ResponseEntity<Customer> deleteCustomer(@RequestParam String key, @RequestParam Integer customerId) throws CustomerException, LogInException {
+    	
+    	Customer customer = customerService.deleteCustomer(key, customerId);
+    	return new ResponseEntity<Customer>(customer, HttpStatus.OK);
+
+    }
+
+
+
+    /*************************************************  Trip-Booking Services  ********************************************************/
+
+
+    /*--------------------------------------------   Create Trip   ------------------------------------------------*/
+    @PostMapping("/trip/create")
+    public ResponseEntity<TripBooking> saveTrip(@RequestParam String key, @RequestParam Integer customerId,@RequestBody TripBooking tripBooking) throws TripBookingException, LoginException{
+
+        TripBooking insertTripBooking = tripBookingService.insertTripBooking(key,tripBooking,customerId);
+        return new ResponseEntity<>(insertTripBooking, HttpStatus.CREATED);
+
+    }
+
+
+    /*--------------------------------------------   Update Trip   ------------------------------------------------*/
+    @PutMapping("/trip/update")
+    public ResponseEntity<TripBooking> updateTripBooking(@RequestParam String key, @RequestParam TripBooking tripBooking) throws LoginException {
+
+        TripBooking updateTrip = tripBookingService.updateTripBooking(key, tripBooking);
+        return new ResponseEntity<>(updateTrip, HttpStatus.ACCEPTED);
+
+    }
+
+
+    /*--------------------------------------------   Allocate Trip To Driver  ------------------------------------------------*/
+    @PutMapping("/trip/allocate/driver")
+    public ResponseEntity<TripBooking> allocateTripToDriver(@RequestParam String key, @RequestParam Integer tripBookingId, @RequestParam Integer driverId) throws CustomerException, LoginException, DriverException, LogInException {
+
+        TripBooking allocateTripBooking = customerService.bookTrip(key,tripBookingId, driverId);
+        return new ResponseEntity<>(allocateTripBooking, HttpStatus.OK);
+
+    }
+
+
+    /*--------------------------------------------   Delete Trip   ------------------------------------------------*/
+    @DeleteMapping("/trip/delete")
+    public ResponseEntity<TripBooking> deleteTripBooking(@RequestParam String key, @RequestParam Integer tripBookingId) throws LoginException {
+
+        TripBooking tripBooking = tripBookingService.deleteTripBooking(key, tripBookingId);
+        return new ResponseEntity<>(tripBooking, HttpStatus.OK);
+
+    }
+
+
+    /*--------------------------------------------   Get All Trips   ------------------------------------------------*/
+    @GetMapping("/trips")
+    public ResponseEntity<List<TripBooking>> viewAllTripsByCustomer(@RequestParam String key,@RequestParam Integer customerId) throws LoginException {
+
+        List<TripBooking> tripBookings = tripBookingService.viewAllTripsByCustomer(key, customerId);
+        return new ResponseEntity<>(tripBookings, HttpStatus.OK);
+
+    }
+
+
+    /*--------------------------------------------   Generate Trip Bill   ------------------------------------------------*/
+    @GetMapping("/trip/bill")
+    public ResponseEntity<String> calculateBill(@RequestParam String key, @RequestParam Integer customerId, @RequestParam Integer tripBookingId) throws CustomerException, LoginException {
+
+        String tripBooking = tripBookingService.calculateBill(key, customerId, tripBookingId);
+        return new ResponseEntity<>(tripBooking, HttpStatus.OK);
+    }
+
+
 }

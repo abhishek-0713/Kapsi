@@ -31,7 +31,7 @@ public interface AdminService {
 
 
     /*-------------------------------- Get Trips By Customer  ---------------------------------*/
-    public List<TripBooking> getAllTrips() throws TripBookingException, CustomerException, LogInException;
+    public List<TripBooking> getAllTrips(String key) throws TripBookingException, CustomerException, LogInException;
 
 
 
