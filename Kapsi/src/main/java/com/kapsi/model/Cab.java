@@ -1,12 +1,21 @@
 package com.kapsi.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Data
@@ -19,9 +28,16 @@ public class Cab {
     @JsonIgnore
     @Column(name = "cab_id")
     private Integer cabId;
+   
+    @NotNull
     private String carType;
+    
+    @Min(6)
+    @Max(21)
     private Float perKmRate;
-//    private boolean availabilityStatus;
+    
+    @NotNull
+    private boolean avalibilityStatus;
 
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
@@ -32,6 +48,6 @@ public class Cab {
     public Cab(String carType, Float perKmRate) {
         this.carType = carType;
         this.perKmRate = perKmRate;
-//        this.availabilityStatus = availabilityStatus;
+   //     this.availabilityStatus = availabilityStatus;
     }
 }

@@ -2,6 +2,8 @@ package com.kapsi.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kapsi.exceptions.CabException;
 import com.kapsi.exceptions.DriverException;
+import com.kapsi.exceptions.LogInException;
+import com.kapsi.model.Cab;
 import com.kapsi.model.Driver;
 import com.kapsi.service.DriverService;
 
@@ -27,7 +33,7 @@ public class DriverController {
 	private DriverService dService;
 	
 	@PostMapping("/register")
-	public ResponseEntity<Driver> registerDriverHandller(@RequestBody Driver driver) throws DriverException{
+	public ResponseEntity<Driver> registerDriverHandller(@Valid @RequestBody Driver driver) throws DriverException{
 		
 		Driver dri = dService.registerDriver(driver);
 		
@@ -37,9 +43,9 @@ public class DriverController {
 	
 	
 	@PutMapping("/update/{driverId}")
-	public ResponseEntity<Driver> registerDriverHandller(@PathVariable("driverId") Integer driverId, @RequestBody Driver driver) throws DriverException{
+	public ResponseEntity<Driver> registerDriverHandller(@RequestParam String key, @PathVariable("driverId") Integer driverId, @RequestBody Driver driver) throws DriverException, LogInException{
 		
-		Driver dri = dService.updateDriver(driverId, driver);
+		Driver dri = dService.updateDriver(key,driverId, driver);
 		
 		return new ResponseEntity<>(dri,HttpStatus.ACCEPTED);
 		
@@ -47,27 +53,27 @@ public class DriverController {
 	
 	
 	@GetMapping("/getById/{driverId}")
-	public ResponseEntity<Driver> getByIdDriverHandller(@PathVariable("driverId") Integer driverId) throws DriverException{
+	public ResponseEntity<Driver> getByIdDriverHandller(@RequestParam String key,@PathVariable("driverId") Integer driverId) throws DriverException, LogInException{
 		
-		Driver dri = dService.getDriverById(driverId);
+		Driver dri = dService.getDriverById(key,driverId);
 		
 		return new ResponseEntity<>(dri,HttpStatus.ACCEPTED);
 		
 	}
 	
 	@GetMapping("/getByName/{userName}")
-	public ResponseEntity<Driver> getByNameDriverHandller(@PathVariable("userName") String userName) throws DriverException{
+	public ResponseEntity<Driver> getByNameDriverHandller(@RequestParam String key,@PathVariable("userName") String userName) throws DriverException, LogInException{
 		
-		Driver dri = dService.getDriverByName(userName);
+		Driver dri = dService.getDriverByName(key,userName);
 		
 		return new ResponseEntity<>(dri,HttpStatus.ACCEPTED);
 		
 	}
 	
 	@DeleteMapping("/deleteById/{driverId}")
-	public ResponseEntity<Driver> deleteByDriverIdHandller(@PathVariable("driverId") Integer driverId) throws DriverException{
+	public ResponseEntity<Driver> deleteByDriverIdHandller(@RequestParam String key,@PathVariable("driverId") Integer driverId) throws DriverException, LogInException{
 		
-		Driver dri = dService.deleteDriverById(driverId);
+		Driver dri = dService.deleteDriverById(key,driverId);
 		
 		return new ResponseEntity<>(dri,HttpStatus.ACCEPTED);
 		
@@ -82,14 +88,21 @@ public class DriverController {
 		
 	}
 	
+     @PutMapping("/allocate")
+    public ResponseEntity<Driver> allocateDriverHandller(@RequestParam Integer cabId, @RequestParam Integer driverId) throws DriverException, CabException{
+    	 
+    	  Driver d = dService.allocateCabToDriver(driverId, cabId);
+    	 
+    	  return new ResponseEntity<>(d,HttpStatus.ACCEPTED);
+     }
 	
-//	@GetMapping("/getByCarType/{carType}")
-//	public ResponseEntity<Driver> getDriverByCarTypeHandller(@PathVariable("carType") String carType) throws DriverException{
-//		
-//		Driver dri = dService.getDriverByCab(carType);
-//		
-//		return new ResponseEntity<>(dri,HttpStatus.ACCEPTED);
-//		
-//	}
+      @GetMapping("/getCab")
+     public ResponseEntity<Cab> getCabyDriverIdHandller(@RequestParam Integer driverId) throws DriverException{
+    	 
+    	 Cab c = dService.viewCabByDriverId(driverId);
+    	 
+    	 return new ResponseEntity<>(c,HttpStatus.CREATED);
+    	 
+     }
 	
 }
