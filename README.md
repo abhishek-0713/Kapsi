@@ -106,4 +106,3 @@ Kapsi is restful service for the Cab Booking Application with all neccessary API
 ### Driver Controller
 ![Screenshot 2023-01-22 204120](https://user-images.githubusercontent.com/105943862/213923522-fa2918f5-17f9-4eec-bea7-c081d08fd598.png)
 
-
