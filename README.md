@@ -2,7 +2,6 @@
 `project code : thinkable-head-979`
 
 <img src="https://user-images.githubusercontent.com/105943862/213908651-77262461-1c3e-4b85-8622-0aa71f285354.png" alt="Kapsi" width = "50%" align=right > 
-
 </br>
 
 Kapsi is a Online Cab Booking Application in Java using Spring Boot with Source Code. 
